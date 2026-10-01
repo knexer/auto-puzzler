@@ -45,8 +45,6 @@ export default class GameState {
     this.boardSlots.push(
       new BoardSlot(this.unlocks, (boardModel) => this.onGameEnd(boardModel))
     );
-
-    this.boardSlots[this.boardSlots.length - 1].onGameCompleted();
   }
 
   handleInterval() {
