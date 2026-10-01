@@ -109,7 +109,7 @@ class UnlockConfig {
     this.addUnlockable(
       "autoRestart3",
       "Auto-Restart 3",
-      "Automatically restart after losing a board. 60 second delay, not affected by automation speed.",
+      "Automatically restart after losing a board. 20 second delay, half of which is not affected by automation speed.",
       100,
       ["autoRestart2"]
     );
