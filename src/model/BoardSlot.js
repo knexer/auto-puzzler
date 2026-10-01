@@ -100,8 +100,12 @@ export default class BoardSlot {
     if (this.boardPlayer) this.boardPlayer.handleInterval();
     if (this.reverseBoardPlayer) this.reverseBoardPlayer.handleInterval();
 
+
     if (this.unlocks.isUnlocked("autoRestart")) {
       if (this.state === "waitingToStart") {
+        if (this.ticksToNextState == undefined) {
+          this.ticksToNextState = this.autoRestartDelay();
+        }
         this.ticksToNextState--;
         if (this.ticksToNextState <= 0) {
           this.startLargestUnlockedGame();
@@ -109,6 +113,9 @@ export default class BoardSlot {
       } else if (this.state === "running") {
         // Nothing here
       } else if (this.state === "waitingToFinish") {
+        if (this.ticksToNextState == undefined) {
+          this.ticksToNextState = this.autoRestartDelay(this.boardModel.isWon);
+        }
         this.ticksToNextState--;
         if (this.ticksToNextState <= 0) {
           this.completeGame();
