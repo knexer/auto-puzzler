@@ -25,7 +25,7 @@ gameState.init();
 gameState.startInterval();
 
 window.cheat = function () {
-  gameState.addMoney(100);
+  gameState.money += 100;
 };
 const resetSave = function () {
   localStorage.removeItem("save");

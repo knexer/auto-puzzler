@@ -118,7 +118,7 @@ export default class BoardPlayer {
   }
 
   handleGuess() {
-    if (this.reverse || !this.automationConfig.guessWhenStuck) return;
+    if (this.automationReverse || !this.automationConfig.guessWhenStuck) return;
 
     function getRandomUnmarkedLocation(model) {
       const loc = {
