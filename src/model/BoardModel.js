@@ -137,12 +137,12 @@ export default class BoardModel {
     return adjacentFlaggable === this.squareAt(loc).adjacentMines;
   }
 
-  value(comboBonus) {
-    return (
-      this.mines +
-      (this.mulligans ? this.mulligans : 0) +
-      this.comboBonusMult * comboBonus
-    );
+  value(comboMult) {
+    const baseValue = this.mines + (this.mulligans ? this.mulligans : 0);
+    if (this.comboValue > 0) {
+      return Math.round(baseValue * comboMult);
+    }
+    return baseValue;
   }
 }
 

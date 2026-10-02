@@ -37,7 +37,7 @@ src/components/
 
 ### Saving
 
-- `localStorage["save"]` holds `{ money, winStreak, unlocks }` and is written every 5 s from `index.js`. Board state is not saved.
+- `localStorage["save"]` holds `{ money, combo, unlocks }` and is written every 5 s from `index.js`. Board state is not saved.
 - I don't really plan to handle backwards/forwards compatible saves, because the game is short enough to be mostly completed in one sitting anyways.
 
 ## Valtio usage

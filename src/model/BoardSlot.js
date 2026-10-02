@@ -29,7 +29,7 @@ export default class BoardSlot {
     return undefined;
   }
 
-  startGame(width, height, mines, comboBonusMult) {
+  startGame(width, height, mines, comboValue) {
     if (this.boardModel !== null) return;
 
     this.state = "running";
@@ -52,7 +52,7 @@ export default class BoardSlot {
       true
     );
 
-    this.boardModel.comboBonusMult = comboBonusMult;
+    this.boardModel.comboValue = comboValue;
     return this.boardModel;
   }
 

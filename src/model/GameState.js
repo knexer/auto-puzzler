@@ -8,7 +8,7 @@ import UnlockState from "./UnlockState.js";
 export default class GameState {
   constructor(deserialized = null) {
     this.money = deserialized?.money ?? 0;
-    this.winStreak = deserialized?.winStreak ?? 0;
+    this.combo = deserialized?.combo ?? 0;
     this.unlocks = proxy(new UnlockState(deserialized?.unlocks));
     this.boardSlots = [];
   }
@@ -16,7 +16,7 @@ export default class GameState {
   serialize() {
     return {
       money: this.money,
-      winStreak: this.winStreak,
+      combo: this.combo,
       unlocks: this.unlocks.serialize(),
     };
   }
@@ -28,16 +28,20 @@ export default class GameState {
     this.addBoardSlot();
   }
 
-  getComboBonus() {
-    return Math.min(5, Math.floor(this.winStreak / 4));
+  getComboMult() {
+    if (this.combo >= 60) return 2;
+    if (this.combo >= 28) return 1.75;
+    if (this.combo >= 12) return 1.5;
+    if (this.combo >= 4) return 1.25;
+    return 1;
   }
 
   onGameEnd(boardModel) {
     if (boardModel.isWon) {
-      this.money += boardModel.value(this.getComboBonus());
-      this.winStreak++;
+      this.money += boardModel.value(this.getComboMult());
+      this.combo += boardModel.comboValue;
     } else {
-      this.winStreak = 0;
+      this.combo = 0;
     }
   }
 

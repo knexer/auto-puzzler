@@ -9,7 +9,7 @@ export default function BoardPanel(props) {
   const unlockState = props.unlockState;
   const unlockStateSnap = useSnapshot(unlockState);
   const gameStateSnap = useSnapshot(props.gameState);
-  const comboBonus = gameStateSnap.getComboBonus();
+  const comboMult = gameStateSnap.getComboMult();
   const boardSlot = props.boardSlot;
   const boardSlotSnap = useSnapshot(props.boardSlot);
 
@@ -21,7 +21,7 @@ export default function BoardPanel(props) {
           player={boardSlot.boardPlayer}
           onGameEnd={() => boardSlot.completeGame()}
           automationConfig={unlockStateSnap.getUnlockedUpgrades()}
-          comboBonus={comboBonus}
+          comboMult={comboMult}
         />
       </Paper>
     );
