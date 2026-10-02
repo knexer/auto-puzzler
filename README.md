@@ -1,70 +1,28 @@
-# Getting Started with Create React App
+# auto-sweeper
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+auto-sweeper is an incremental game based on Minesweeper. Solving Minesweeper boards earns money, which can be spent on upgrades which assist you in solving further boards. This virtuous cycle of mine-sweeping currently ends with the purchase of the final upgrade 'Ludicrous Automation Speed'.
 
-## Available Scripts
+Published to https://knexer.itch.io/auto-sweeper (HTML5).
 
-In the project directory, you can run:
+## Gameplay
 
-### `npm start`
+- **Boards.** Boards are small, ranging from 4x4 to 9x9. Left-click reveals a square and right-click flags it. You win once every mine is flagged and every safe square is revealed, or lose if you reveal a mine.
+- **Money.** Winning gives $1 per mine, plus $1 for each unused mulligan, plus a combo bonus on medium and large boards. You spend money on upgrades.
+- **Combo.** WIP anti-guessing carrot. Consecutive wins build your combo. Losing resets it, but only after you abandon the game, so the multi-board upgrade effectively gives combo armor.
+- **Upgrades.** Two categories here: upgrades that improve the automation (make it smarter or faster) and upgrades that just give straight buffs, like mulligans or extra boards.
+- Money, upgrades, and win streak autosave to `localStorage` every 5 seconds. Board state is not saved. I think that would be hard to implement with how the game is set up, but it also isn't that important since boards are so small.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Development
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```sh
+npm install
+npm start          # dev server on http://localhost:3000
+npm run build      # production build into build/
+npm run deploy     # builds, then pushes build/ to itch.io via butler
+```
 
-### `npm test`
+`npm run deploy` needs the [butler](https://itch.io/docs/butler/) CLI installed and logged in.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+`window.cheat()` in the console adds $100. Good for testing to skip the early game.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Written in JS with React 18 + [valtio](https://github.com/pmndrs/valtio) (proxy-based state management) + MUI starting from Create React App template.
