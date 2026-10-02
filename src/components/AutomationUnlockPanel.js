@@ -72,11 +72,13 @@ export default function AutomationUnlockPanel(props) {
       <Typography variant="h3" className="header">
         auto-sweeper <div className="money">${gameStateSnap.money}</div>
       </Typography>
-      <Paper className="combo-panel" elevation={4}>
-        {gameStateSnap.combo} combo (
-        {gameStateSnap.getComboMult()}x bonus)
-        <div></div>
-      </Paper>
+      {unlockStateSnap.isUnlocked("combo") && (
+        <Paper className="combo-panel" elevation={4}>
+          {gameStateSnap.combo} combo (
+          {gameStateSnap.getComboMult()}x bonus)
+          <div></div>
+        </Paper>
+      )}
       <Accordion disableGutters elevation={4} defaultExpanded={true}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h5">Upgrades:</Typography>

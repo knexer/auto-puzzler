@@ -39,7 +39,9 @@ export default class GameState {
   onGameEnd(boardModel) {
     if (boardModel.isWon) {
       this.money += boardModel.value(this.getComboMult());
-      this.combo += boardModel.comboValue;
+      if (this.unlocks.isUnlocked("combo")) {
+        this.combo += boardModel.comboValue;
+      }
     } else {
       this.combo = 0;
     }

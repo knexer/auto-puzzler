@@ -172,8 +172,15 @@ class UnlockConfig {
     this.addUnlockable(
       "boardLarge",
       "Large Board",
-      "Play on an even bigger board, with even more mines, worth even more money.",
+      "Play on an even bigger board, with even more mines, worth even more money. Also builds combo twice as fast!",
       20,
+      ["boardMedium"]
+    );
+    this.addUnlockable(
+      "combo",
+      "Combo",
+      "Winning medium boards increases your combo, multiplying your profits. Abandoning a lost board resets your combo.",
+      12,
       ["boardMedium"]
     );
   }
