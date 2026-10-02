@@ -30,18 +30,17 @@ export default class BoardPlayer {
     };
   }
 
-  handleClick(loc, snapshot) {
-    const readModel = snapshot ?? this.model;
-    const square = readModel.squareAt(loc);
+  handleClick(loc) {
+    const square = this.model.squareAt(loc);
     if (square.flagged) {
       return;
     }
 
     if (square.revealed) {
-      this.applyAutomationRules(loc, readModel);
+      this.applyAutomationRules(loc);
     }
 
-    if (this.model.mulligans > 0 && readModel.squareAt(loc).mine) {
+    if (this.model.mulligans > 0 && this.model.squareAt(loc).mine) {
       this.model.squareAt(loc).flagged = true;
       this.model.mulligans--;
     } else {
@@ -49,10 +48,9 @@ export default class BoardPlayer {
     }
   }
 
-  handleFlag(loc, flagged, snapshot) {
-    const readModel = snapshot ?? this.model;
-    if (readModel.squareAt(loc).revealed) {
-      this.applyAutomationRules(loc, readModel);
+  handleFlag(loc, flagged) {
+    if (this.model.squareAt(loc).revealed) {
+      this.applyAutomationRules(loc);
     } else {
       this.model.squareAt(loc).flagged = flagged;
     }
@@ -66,15 +64,15 @@ export default class BoardPlayer {
     return this.automationConfig.automate3;
   }
 
-  applyAutomationRules(loc, readModel) {
-    const square = readModel.squareAt(loc);
+  applyAutomationRules(loc) {
+    const square = this.model.squareAt(loc);
 
     if (this.canApplyToSquare(square)) {
-      if (readModel.revealAdjacentSquaresIsSafe(loc)) {
+      if (this.model.revealAdjacentSquaresIsSafe(loc)) {
         this.model.revealAdjacentSquares(loc);
       }
 
-      if (readModel.flagAdjacentSquaresIsSafe(loc)) {
+      if (this.model.flagAdjacentSquaresIsSafe(loc)) {
         this.model.flagAdjacentSquares(loc);
       }
     }
@@ -106,7 +104,7 @@ export default class BoardPlayer {
     // Simulate a left and/or right click on the square at the next automation location.
     const square = this.model.squareAt(this.automationLoc);
     if (square.revealed) {
-      this.applyAutomationRules(this.automationLoc, this.model);
+      this.applyAutomationRules(this.automationLoc);
     }
 
     // Move to the next square.

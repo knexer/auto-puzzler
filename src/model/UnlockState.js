@@ -46,8 +46,9 @@ export default class UnlockState {
     if (unlocks.get("autoSpeed2")) numIntervalUpgrades++;
     if (unlocks.get("autoSpeed3")) numIntervalUpgrades++;
     if (unlocks.get("autoSpeed4")) numIntervalUpgrades++;
-    if (unlocks.get("autoSpeed5")) numIntervalUpgrades++;
+    if (unlocks.get("autoSpeed5")) numIntervalUpgrades += 2;
 
+    // Maxes out at 4ms delay because that's how timers work
     return Math.pow(2, numIntervalUpgrades);
   }
 }
