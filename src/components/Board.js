@@ -33,23 +33,28 @@ export default function Board(props) {
         <div className="status">
           <Button
             variant="contained"
+            color={props.comboMult > 1 ? "error" : "primary"}
             onClick={() => props.onGameEnd(model, false)}
           >
-            Abandon Game
+            Abandon Game{props.comboMult > 1 ? ", Reset x" + props.comboMult + " Combo" : ""}
           </Button>
         </div>
       );
-    if (gameWin)
+    if (gameWin) {
+      const {base, mulligans, combo, total} = model.valueBreakdown(props.comboMult);
       return (
         <div className="status">
           <Button
             variant="contained"
             onClick={() => props.onGameEnd(model, true)}
           >
-            Claim Spoils - ${model.value(props.comboMult)}
+            <span>
+              Claim {base} 🚩 + {mulligans} 🛡️{combo > 1 ? ", x" + combo: ""} = <b>${total}</b>
+            </span>
           </Button>
         </div>
       );
+    }
     const correctFlags = "🚩".repeat(Math.min(model.mines, numFlaggedSquares));
     const excessFlags = "⚠️".repeat(
       Math.max(0, numFlaggedSquares - model.mines)

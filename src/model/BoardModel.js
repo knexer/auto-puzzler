@@ -144,6 +144,15 @@ export default class BoardModel {
     }
     return baseValue;
   }
+
+  valueBreakdown(comboMult) {
+    return {
+      base: this.mines,
+      mulligans: (this.mulligans ? this.mulligans : 0),
+      combo: (this.comboValue > 0 ? comboMult : 1),
+      total: this.value(comboMult)
+    };
+  }
 }
 
 export { initBoard, populateBoard, revealStartingSpace };

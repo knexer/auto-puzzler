@@ -74,8 +74,7 @@ export default function AutomationUnlockPanel(props) {
       </Typography>
       {unlockStateSnap.isUnlocked("combo") && (
         <Paper className="combo-panel" elevation={4}>
-          {gameStateSnap.combo} combo (
-          {gameStateSnap.getComboMult()}x bonus)
+          x{gameStateSnap.getComboMult()} Mult ({gameStateSnap.combo} Combo)
           <div></div>
         </Paper>
       )}
