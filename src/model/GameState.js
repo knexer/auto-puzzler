@@ -3,6 +3,14 @@ import { proxy } from "valtio";
 import BoardSlot from "./BoardSlot.js";
 import UnlockState from "./UnlockState.js";
 
+const COMBO_TIERS = [
+  { combo: 0, mult: 1 },
+  { combo: 4, mult: 1.25 },
+  { combo: 12, mult: 1.5 },
+  { combo: 28, mult: 1.75 },
+  { combo: 60, mult: 2 },
+];
+
 // A root class for the state of the game as a whole.
 // Owns the player's money, the upgrades the player has unlocked, and (shortly) all of the currently going games.
 export default class GameState {
@@ -28,12 +36,25 @@ export default class GameState {
     this.addBoardSlot();
   }
 
+  getComboTier() {
+    return COMBO_TIERS.filter((tier) => this.combo >= tier.combo).length - 1;
+  }
+
   getComboMult() {
-    if (this.combo >= 60) return 2;
-    if (this.combo >= 28) return 1.75;
-    if (this.combo >= 12) return 1.5;
-    if (this.combo >= 4) return 1.25;
-    return 1;
+    return COMBO_TIERS[this.getComboTier()].mult;
+  }
+
+  getComboProgress() {
+    const current = COMBO_TIERS[this.getComboTier()];
+    const next = COMBO_TIERS[this.getComboTier() + 1];
+    if (!next) {
+      return;
+    }
+    return {
+      progress: this.combo - current.combo,
+      tierGap: next.combo - current.combo,
+      nextMult: next.mult,
+    };
   }
 
   onGameEnd(boardModel) {

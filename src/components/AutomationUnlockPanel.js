@@ -11,6 +11,7 @@ import {
   ListItemButton,
   ListItemText,
   Paper,
+  LinearProgress,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -40,6 +41,31 @@ const renderUnlockable = (unlockable, unlockStateSnap, money, gameState) => {
   );
 };
 
+const renderComboPanel = (gameStateSnap) => {
+  const tier = gameStateSnap.getComboTier();
+  const progress = gameStateSnap.getComboProgress();
+  const fraction = progress ? progress.progress / progress.tierGap : 1;
+  return (
+    <Paper className="combo-panel" elevation={4}>
+      <Typography variant="h4" className={`combo-mult combo-tier-${tier}`}>
+        x{gameStateSnap.getComboMult()}
+      </Typography>
+      <div className="combo-progress">
+        <LinearProgress
+          variant="determinate"
+          value={fraction * 100}
+          className={`combo-bar combo-tier-${progress ? tier + 1 : tier}`}
+        />
+        <Typography variant="caption">
+          {progress
+            ? `${progress.progress} / ${progress.tierGap} to x${progress.nextMult}`
+            : "MAX"}
+        </Typography>
+      </div>
+    </Paper>
+  );
+};
+
 export default function AutomationUnlockPanel(props) {
   const gameStateSnap = useSnapshot(props.gameState);
   const unlockStateSnap = gameStateSnap.unlocks;
@@ -52,7 +78,7 @@ export default function AutomationUnlockPanel(props) {
       unlockable,
       unlockStateSnap,
       gameStateSnap.money,
-      props.gameState
+      props.gameState,
     );
     if (unlockStateSnap.isUnlocked(key)) {
       purchasedUnlockables.push(renderedUnlockable);
@@ -64,7 +90,7 @@ export default function AutomationUnlockPanel(props) {
   availableUnlockables.sort(
     (a, b) =>
       unlockConfig.getUnlockable(a.key).cost -
-      unlockConfig.getUnlockable(b.key).cost
+      unlockConfig.getUnlockable(b.key).cost,
   );
 
   return (
@@ -72,12 +98,7 @@ export default function AutomationUnlockPanel(props) {
       <Typography variant="h3" className="header">
         auto-sweeper <div className="money">${gameStateSnap.money}</div>
       </Typography>
-      {unlockStateSnap.isUnlocked("combo") && (
-        <Paper className="combo-panel" elevation={4}>
-          x{gameStateSnap.getComboMult()} Mult ({gameStateSnap.combo} Combo)
-          <div></div>
-        </Paper>
-      )}
+      {unlockStateSnap.isUnlocked("combo") && renderComboPanel(gameStateSnap)}
       <Accordion disableGutters elevation={4} defaultExpanded={true}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h5">Upgrades:</Typography>

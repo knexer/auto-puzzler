@@ -55,7 +55,6 @@ ul {
   padding-bottom:5px;
   padding-left:10px;
   padding-right:10px;
-  letter-spacing: 50px;
 }
 
 .square {
@@ -166,7 +165,6 @@ ul {
 }
 
 .header {
-  font-size: large;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -177,11 +175,44 @@ ul {
 
 .combo-panel {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-left: 10px;
   align-items: center;
+  gap: 16px;
+  padding: 8px 12px;
 }
+
+.combo-mult {
+  color: var(--tier-color);
+  font-weight: bold;
+  min-width: 3.5em;
+}
+
+.combo-progress {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 1px;
+}
+
+.combo-progress .MuiTypography-root {
+  line-height: 1;
+}
+
+.combo-bar .MuiLinearProgress-bar {
+  background-color: var(--tier-color);
+}
+
+.combo-bar {
+  height: 16px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.combo-tier-0 { --tier-color: #9e9e9e; }
+.combo-tier-1 { --tier-color: #ffd54f; }
+.combo-tier-2 { --tier-color: #ffa726; }
+.combo-tier-3 { --tier-color: #ff5722; }
+.combo-tier-4 { --tier-color: #ff2d75; }
 
 .game-info {
   display: flex;
