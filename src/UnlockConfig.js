@@ -106,13 +106,13 @@ class UnlockConfig {
       100,
       ["autoRestart"]
     );
-    this.addUnlockable(
-      "autoRestart3",
-      "Auto-Restart 3",
-      "Automatically restart after losing a board. 20 second delay, half of which is not affected by automation speed.",
-      100,
-      ["autoRestart2"]
-    );
+    // this.addUnlockable(
+    //   "autoRestart3",
+    //   "Auto-Restart 3",
+    //   "Automatically restart after losing a board. 20 second delay, half of which is not affected by automation speed.",
+    //   100,
+    //   ["autoRestart2"]
+    // );
     this.addUnlockable(
       "guessWhenStuck",
       "Anti-Stuck 1",
@@ -183,6 +183,13 @@ class UnlockConfig {
       12,
       ["boardMedium"]
     );
+    this.addUnlockable(
+      "win",
+      "Win the Game",
+      "Congrats, you beat auto-sweeper!",
+      1000,
+      ["autoSpeed3"]
+    )
   }
 
   addUnlockable(key, title, desc, cost, reqs) {
