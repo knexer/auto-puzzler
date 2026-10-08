@@ -16,6 +16,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import unlockConfig from "../UnlockConfig";
+import { COMBO_TIERS } from "../model/GameState";
 
 const renderUnlockable = (unlockable, unlockStateSnap, money, gameState) => {
   return (
@@ -44,18 +45,23 @@ const renderUnlockable = (unlockable, unlockStateSnap, money, gameState) => {
 const renderComboPanel = (gameStateSnap) => {
   const tier = gameStateSnap.getComboTier();
   const progress = gameStateSnap.getComboProgress();
-  const fraction = progress ? progress.progress / progress.tierGap : 1;
   return (
     <Paper className="combo-panel" elevation={4}>
       <Typography variant="h4" className={`combo-mult combo-tier-${tier}`}>
         x{gameStateSnap.getComboMult()}
       </Typography>
       <div className="combo-progress">
-        <LinearProgress
-          variant="determinate"
-          value={fraction * 100}
-          className={`combo-bar combo-tier-${progress ? tier + 1 : tier}`}
-        />
+        <div className="combo-bar-stack">
+          {COMBO_TIERS.slice(0, -1).map((_, i) => (
+            <LinearProgress
+              key={i}
+              variant="determinate"
+              value={gameStateSnap.getComboFraction(i) * 100}
+              className="combo-bar-layer"
+              classes={{ bar: `combo-tier-${i + 1}` }}
+            />
+          ))}
+        </div>
         <Typography variant="caption">
           {progress
             ? `${progress.progress} / ${progress.tierGap} to x${progress.nextMult}`

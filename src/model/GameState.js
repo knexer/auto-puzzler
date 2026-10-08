@@ -3,7 +3,7 @@ import { proxy } from "valtio";
 import BoardSlot from "./BoardSlot.js";
 import UnlockState from "./UnlockState.js";
 
-const COMBO_TIERS = [
+export const COMBO_TIERS = [
   { combo: 0, mult: 1 },
   { combo: 4, mult: 1.25 },
   { combo: 12, mult: 1.5 },
@@ -55,6 +55,12 @@ export default class GameState {
       tierGap: next.combo - current.combo,
       nextMult: next.mult,
     };
+  }
+
+  getComboFraction(tier) {
+    const low = COMBO_TIERS[tier].combo;
+    const high = COMBO_TIERS[tier + 1].combo;
+    return Math.max(0, Math.min(1, (this.combo - low) / (high - low)));
   }
 
   onGameEnd(boardModel) {
