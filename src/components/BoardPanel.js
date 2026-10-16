@@ -37,18 +37,18 @@ export default function BoardPanel(props) {
       <Paper elevation={4} className="board-container">
         {renderNewGameButton(
           () => boardSlot.startSmallGame(),
-          "New Smol Board"
+          "New Smol Board",
         )}
         {unlockStateSnap.isUnlocked("boardMedium")
           ? renderNewGameButton(
               () => boardSlot.startMediumGame(),
-              "New Medium Board"
+              "New Medium Board",
             )
           : ""}
         {unlockStateSnap.isUnlocked("boardLarge")
           ? renderNewGameButton(
               () => boardSlot.startLargeGame(),
-              "New Big Board"
+              "New Big Board",
             )
           : ""}
       </Paper>

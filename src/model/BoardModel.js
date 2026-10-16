@@ -9,9 +9,9 @@ const initBoard = (boardModel) => {
   boardModel.squares = Array.from({ length: boardModel.height }, (_, y) =>
     Array.from({ length: boardModel.width }, (_, x) =>
       proxy(
-        new SquareModel(() => boardModel.handleSquareChanged({ x: x, y: y }))
-      )
-    )
+        new SquareModel(() => boardModel.handleSquareChanged({ x: x, y: y })),
+      ),
+    ),
   );
 
   placeMines(boardModel);
@@ -46,8 +46,8 @@ const revealStartingSpace = (boardModel, mustBeZero) => {
       .allSquares()
       .filter(
         ({ square }) =>
-          !square.mine && (square.adjacentMines === 0 || !mustBeZero)
-      )
+          !square.mine && (square.adjacentMines === 0 || !mustBeZero),
+      ),
   );
   randomSquare.square.revealed = true;
 };
@@ -79,7 +79,7 @@ export default class BoardModel {
     }
 
     this.numFlaggedSquares = this.allSquares().filter(
-      ({ square }) => square.flagged
+      ({ square }) => square.flagged,
     ).length;
 
     this.version++;
@@ -113,7 +113,7 @@ export default class BoardModel {
     return this.squares.flatMap((arr, y) =>
       arr.map((square, x) => {
         return { square: square, loc: { x: x, y: y } };
-      })
+      }),
     );
   }
 
@@ -136,7 +136,7 @@ export default class BoardModel {
 
   revealAdjacentSquaresIsSafe(loc) {
     const adjacentFlagged = this.adjacentSquares(loc).filter(
-      ({ square }) => square.flagged
+      ({ square }) => square.flagged,
     ).length;
     return adjacentFlagged >= this.squareAt(loc).adjacentMines;
   }
@@ -147,7 +147,7 @@ export default class BoardModel {
 
   flagAdjacentSquaresIsSafe(loc) {
     const adjacentFlaggable = this.adjacentSquares(loc).filter(
-      ({ square }) => square.flagged || !square.revealed
+      ({ square }) => square.flagged || !square.revealed,
     ).length;
     return adjacentFlaggable === this.squareAt(loc).adjacentMines;
   }
@@ -163,9 +163,9 @@ export default class BoardModel {
   valueBreakdown(comboMult) {
     return {
       base: this.mines,
-      mulligans: (this.mulligans ? this.mulligans : 0),
-      combo: (this.comboValue > 0 ? comboMult : 1),
-      total: this.value(comboMult)
+      mulligans: this.mulligans ? this.mulligans : 0,
+      combo: this.comboValue > 0 ? comboMult : 1,
+      total: this.value(comboMult),
     };
   }
 }

@@ -11,7 +11,7 @@ export default class UnlockState {
       Array.from(unlockConfig.unlockables.keys()).map((key) => [
         key,
         deserializedMap.get(key),
-      ])
+      ]),
     );
   }
 

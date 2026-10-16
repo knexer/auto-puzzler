@@ -36,12 +36,17 @@ export default function Board(props) {
             color={props.comboMult > 1 ? "error" : "primary"}
             onClick={() => props.onGameEnd(model, false)}
           >
-            Abandon Game{props.comboMult > 1 ? ", Reset x" + props.comboMult + " Combo" : ""}
+            Abandon Game
+            {props.comboMult > 1
+              ? ", Reset x" + props.comboMult + " Combo"
+              : ""}
           </Button>
         </div>
       );
     if (gameWin) {
-      const {base, mulligans, combo, total} = model.valueBreakdown(props.comboMult);
+      const { base, mulligans, combo, total } = model.valueBreakdown(
+        props.comboMult,
+      );
       return (
         <div className="status">
           <Button
@@ -49,7 +54,8 @@ export default function Board(props) {
             onClick={() => props.onGameEnd(model, true)}
           >
             <span>
-              Claim {base} 🚩 + {mulligans} 🛡️{combo > 1 ? ", x" + combo: ""} = <b>${total}</b>
+              Claim {base} 🚩 + {mulligans} 🛡️{combo > 1 ? ", x" + combo : ""} ={" "}
+              <b>${total}</b>
             </span>
           </Button>
         </div>
@@ -57,10 +63,10 @@ export default function Board(props) {
     }
     const correctFlags = "🚩".repeat(Math.min(model.mines, numFlaggedSquares));
     const excessFlags = "⚠️".repeat(
-      Math.max(0, numFlaggedSquares - model.mines)
+      Math.max(0, numFlaggedSquares - model.mines),
     );
     const unflaggedMines = "💣".repeat(
-      Math.max(0, model.mines - numFlaggedSquares)
+      Math.max(0, model.mines - numFlaggedSquares),
     );
     return (
       <div className="status">

@@ -36,7 +36,7 @@ export default class BoardSlot {
     this.state = "running";
 
     this.boardModel = new BoardModel(width, height, mines, (won) =>
-      this.onGameCompleted(won)
+      this.onGameCompleted(won),
     );
     initBoard(this.boardModel);
 
@@ -52,7 +52,7 @@ export default class BoardSlot {
     this.reverseBoardPlayer = new BoardPlayer(
       this.boardModel,
       this.unlocks,
-      true
+      true,
     );
 
     this.boardModel.comboValue = comboValue;
@@ -102,7 +102,6 @@ export default class BoardSlot {
   handleInterval() {
     if (this.boardPlayer) this.boardPlayer.handleInterval();
     if (this.reverseBoardPlayer) this.reverseBoardPlayer.handleInterval();
-
 
     if (this.unlocks.isUnlocked("autoRestart")) {
       if (this.state === "waitingToStart") {

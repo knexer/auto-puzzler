@@ -76,7 +76,7 @@ export default class GameState {
 
   addBoardSlot() {
     this.boardSlots.push(
-      new BoardSlot(this.unlocks, (boardModel) => this.onGameEnd(boardModel))
+      new BoardSlot(this.unlocks, (boardModel) => this.onGameEnd(boardModel)),
     );
   }
 
@@ -98,7 +98,7 @@ export default class GameState {
     this.stopInterval();
     this.timeoutId = setTimeout(
       () => this.handleInterval(),
-      250 / this.unlocks.automationSpeed()
+      250 / this.unlocks.automationSpeed(),
     );
   }
 
