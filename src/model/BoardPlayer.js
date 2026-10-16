@@ -118,19 +118,6 @@ export default class BoardPlayer {
   handleGuess() {
     if (this.automationReverse || !this.automationConfig.guessWhenStuck) return;
 
-    function getRandomUnmarkedLocation(model) {
-      const loc = {
-        x: Math.floor(Math.random() * model.width),
-        y: Math.floor(Math.random() * model.height),
-      };
-      const square = model.squareAt(loc);
-      if (!square.revealed && !square.flagged) {
-        return loc;
-      } else {
-        return getRandomUnmarkedLocation(model);
-      }
-    }
-
     // Start the guess timer if this is the first time we've been stuck on this version.
     if (this.model.version !== this.guessVersion) {
       this.guessVersion = this.model.version;
@@ -141,7 +128,14 @@ export default class BoardPlayer {
 
     if (this.ticksUntilGuess === 0) {
       // Time to guess.
-      this.handleClick(getRandomUnmarkedLocation(this.model));
+      const candidates = this.model
+        .allSquares()
+        .filter(({ square }) => !square.revealed && !square.flagged);
+      if (candidates.length > 0) {
+        this.handleClick(
+          candidates[Math.floor(Math.random() * candidates.length)].loc,
+        );
+      }
       this.ticksUntilGuess = undefined;
     }
   }

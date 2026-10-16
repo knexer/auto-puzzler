@@ -1,6 +1,10 @@
 import SquareModel from "./SquareModel.js";
 import { proxy } from "valtio";
 
+const randomElement = (list) => {
+  return list[Math.floor(Math.random() * list.length)];
+};
+
 const initBoard = (boardModel) => {
   boardModel.squares = Array.from({ length: boardModel.height }, (_, y) =>
     Array.from({ length: boardModel.width }, (_, x) =>
@@ -9,32 +13,43 @@ const initBoard = (boardModel) => {
       )
     )
   );
+
+  placeMines(boardModel);
 };
 
-const populateBoard = (boardModel) => {
-  for (let i = 0; i < boardModel.mines; i++) {
-    for (let attempt = 0; attempt < 10; attempt++) {
-      const x = Math.floor(Math.random() * boardModel.width);
-      const y = Math.floor(Math.random() * boardModel.height);
-      if (boardModel.tryAddMine({ x: x, y: y })) break;
-    }
+const placeMines = (boardModel) => {
+  // Wipe all existing mines
+  for (const { square } of boardModel.allSquares()) {
+    square.mine = false;
+    square.adjacentMines = 0;
   }
+
+  // Place N mines in random empty locations
+  for (let i = 0; i < boardModel.mines; i++) {
+    const emptySquares = boardModel
+      .allSquares()
+      .filter(({ square }) => !square.mine);
+    const { loc } = randomElement(emptySquares);
+    boardModel.tryAddMine(loc);
+  }
+};
+
+const hasZero = (boardModel) => {
+  return boardModel
+    .allSquares()
+    .some(({ square }) => !square.mine && square.adjacentMines === 0);
 };
 
 const revealStartingSpace = (boardModel, mustBeZero) => {
-  while (true) {
-    const randomSquare = boardModel.squareAt({
-      x: Math.floor(Math.random() * boardModel.width),
-      y: Math.floor(Math.random() * boardModel.height),
-    });
-
-    if (randomSquare.mine) continue;
-
-    if (!mustBeZero || randomSquare.adjacentMines === 0) {
-      randomSquare.revealed = true;
-      break;
-    }
-  }
+  const randomSquare = randomElement(
+    boardModel
+      .allSquares()
+      .filter(
+        ({ square }) =>
+          !square.mine && (square.adjacentMines === 0 || !mustBeZero)
+      )
+  );
+  randomSquare.square.revealed = true;
 };
 
 export default class BoardModel {
@@ -155,4 +170,4 @@ export default class BoardModel {
   }
 }
 
-export { initBoard, populateBoard, revealStartingSpace };
+export { initBoard, placeMines, hasZero, revealStartingSpace };

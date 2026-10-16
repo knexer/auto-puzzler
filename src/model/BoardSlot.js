@@ -1,6 +1,7 @@
 import BoardModel, {
   initBoard,
-  populateBoard,
+  placeMines,
+  hasZero,
   revealStartingSpace,
 } from "./BoardModel.js";
 import BoardPlayer from "./BoardPlayer.js";
@@ -38,9 +39,11 @@ export default class BoardSlot {
       this.onGameCompleted(won)
     );
     initBoard(this.boardModel);
-    populateBoard(this.boardModel);
-    const startWithZero = this.unlocks.isUnlocked("startWithRevealedZero");
 
+    const startWithZero = this.unlocks.isUnlocked("startWithRevealedZero");
+    while (startWithZero && !hasZero(this.boardModel)) {
+      placeMines(this.boardModel);
+    }
     if (this.unlocks.isUnlocked("startWithRevealedSquare") || startWithZero) {
       revealStartingSpace(this.boardModel, startWithZero);
     }
