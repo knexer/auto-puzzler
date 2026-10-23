@@ -17,10 +17,15 @@ export default class BoardSlot {
     this.boardPlayer = null;
     this.reverseBoardPlayer = null;
     this.state = "waitingToStart";
-    this.ticksToNextState = this.autoRestartDelay();
+    this.maybeAutoRestart();
   }
 
-  autoRestartDelay(won = true) {
+  maybeAutoRestart(won = true) {
+    this.ticksToNextState = this.autoRestartDelay(won);
+    this.ticksTotal = this.ticksToNextState;
+  }
+
+  autoRestartDelay(won) {
     const shortDelay = 4 * 10;
     const longDelay = shortDelay * this.unlocks.automationSpeed();
     if (won && this.unlocks.isUnlocked("autoRestart2")) return shortDelay;
@@ -28,6 +33,11 @@ export default class BoardSlot {
     if (won && this.unlocks.isUnlocked("autoRestart")) return longDelay;
 
     return undefined;
+  }
+
+  get autoRestartFraction() {
+    if (!Number.isFinite(this.ticksToNextState)) return null;
+    return 1 - this.ticksToNextState / this.ticksTotal;
   }
 
   startGame(width, height, mines, comboValue) {
@@ -61,7 +71,7 @@ export default class BoardSlot {
 
   onGameCompleted(won) {
     this.state = "waitingToFinish";
-    this.ticksToNextState = this.autoRestartDelay(won);
+    this.maybeAutoRestart(won);
   }
 
   completeGame() {
@@ -77,7 +87,7 @@ export default class BoardSlot {
     this.reverseBoardPlayer = null;
 
     this.state = "waitingToStart";
-    this.ticksToNextState = this.autoRestartDelay();
+    this.maybeAutoRestart();
   }
 
   startSmallGame() {
@@ -106,7 +116,7 @@ export default class BoardSlot {
     if (this.unlocks.isUnlocked("autoRestart")) {
       if (this.state === "waitingToStart") {
         if (this.ticksToNextState === undefined) {
-          this.ticksToNextState = this.autoRestartDelay();
+          this.maybeAutoRestart();
         }
         this.ticksToNextState--;
         if (this.ticksToNextState <= 0) {
@@ -116,7 +126,7 @@ export default class BoardSlot {
         // Nothing here
       } else if (this.state === "waitingToFinish") {
         if (this.ticksToNextState === undefined) {
-          this.ticksToNextState = this.autoRestartDelay(this.boardModel.isWon);
+          this.this.maybeAutoRestart(this.boardModel.isWon);
         }
         this.ticksToNextState--;
         if (this.ticksToNextState <= 0) {

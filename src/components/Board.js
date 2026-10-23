@@ -3,9 +3,11 @@ import { useSnapshot } from "valtio";
 import { Button, Paper, Typography } from "@mui/material/";
 
 import Square from "./Square.js";
+import AutoRestartButton from "./AutoRestartButton.js";
 
 export default function Board(props) {
   const model = props.model;
+  const slot = props.slot;
   const modelSnap = useSnapshot(model);
   const width = modelSnap.width;
   const height = modelSnap.height;
@@ -49,7 +51,8 @@ export default function Board(props) {
       );
       return (
         <div className="status">
-          <Button
+          <AutoRestartButton
+            slot={slot}
             variant="contained"
             onClick={() => props.onGameEnd(model, true)}
           >
@@ -57,7 +60,7 @@ export default function Board(props) {
               Claim {base} 🚩 + {mulligans} 🛡️{combo > 1 ? ", x" + combo : ""} ={" "}
               <b>${total}</b>
             </span>
-          </Button>
+          </AutoRestartButton>
         </div>
       );
     }

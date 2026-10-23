@@ -4,6 +4,7 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 
 import Board from "./Board.js";
+import AutoRestartButton from "./AutoRestartButton.js";
 
 export default function BoardPanel(props) {
   const unlockState = props.unlockState;
@@ -18,6 +19,7 @@ export default function BoardPanel(props) {
       <Paper elevation={4} className="board-container">
         <Board
           model={boardSlot.boardModel}
+          slot={boardSlot}
           player={boardSlot.boardPlayer}
           onGameEnd={() => boardSlot.completeGame()}
           automationConfig={unlockStateSnap.getUnlockedUpgrades()}
@@ -26,29 +28,44 @@ export default function BoardPanel(props) {
       </Paper>
     );
   } else {
-    const renderNewGameButton = (startGame, text) => {
+    const renderNewGameButton = (startGame, text, auto) => {
+      if (auto) {
+        return (
+          <AutoRestartButton
+            variant="contained"
+            slot={boardSlot}
+            onClick={startGame}
+          >
+            {text}
+          </AutoRestartButton>
+        );
+      }
       return (
         <Button variant="contained" onClick={startGame}>
           {text}
         </Button>
       );
     };
+    const autoUnlocked = unlockStateSnap.isUnlocked("autoRestart");
     return (
       <Paper elevation={4} className="board-container">
         {renderNewGameButton(
           () => boardSlot.startSmallGame(),
           "New Smol Board",
+          autoUnlocked && !unlockStateSnap.isUnlocked("boardMedium"),
         )}
         {unlockStateSnap.isUnlocked("boardMedium")
           ? renderNewGameButton(
               () => boardSlot.startMediumGame(),
               "New Medium Board",
+              autoUnlocked && !unlockStateSnap.isUnlocked("boardLarge"),
             )
           : ""}
         {unlockStateSnap.isUnlocked("boardLarge")
           ? renderNewGameButton(
               () => boardSlot.startLargeGame(),
               "New Big Board",
+              autoUnlocked,
             )
           : ""}
       </Paper>

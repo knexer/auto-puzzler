@@ -50,16 +50,13 @@ It took a lot of iteration to get to this point in using Valtio. It's a confusin
 
 ## Known issues / tech debt
 
-- `handleGuess`'s `getRandomUnmarkedLocation` recurses randomly until it finds an unmarked square. If none exists, stack goes boom. That will happen on a board that is fully revealed and has manual mis-flags.
 - Profiling and optimizing has not been done, is tracked in #28. Perf isn't obviously terrible on my machine though.
 - The `gh-pages` devDependency is unused, left over since deployment moved to itch.
 - Create React App is apparently deprecated now. Probably not going to change anything that foundational at this point.
 
 ## Approximate roadmap
 
-- Reward careful play so guess-spam isn't the one true strategy. The WIP combo mechanic is trying to do this.
 - Add some ending that's more satisfying than just 'you bought all the upgrades, you win'. Thinking of a final challenge mega sized board, maybe something that reveals a message in the mine pattern, like 'GG' or a smileyface or something.
-- Change the title/favicon
 - Add a confirmation to the Reset Save button
 - Show the auto-guess and auto-restart timers for each board
 - MAYBE add smarter automation rules, e.g. ones that consider pairs of nearby cells.
