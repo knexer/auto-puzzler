@@ -126,9 +126,11 @@ export default class BoardSlot {
         // Nothing here
       } else if (this.state === "waitingToFinish") {
         if (this.ticksToNextState === undefined) {
-          this.this.maybeAutoRestart(this.boardModel.isWon);
+          this.maybeAutoRestart(this.boardModel.isWon);
         }
-        this.ticksToNextState--;
+        if (this.ticksToNextState !== undefined) {
+          this.ticksToNextState--;
+        }
         if (this.ticksToNextState <= 0) {
           this.completeGame();
         }

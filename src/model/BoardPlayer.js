@@ -1,3 +1,5 @@
+export const GUESS_VIZ_DURATION = 4 * 150;
+
 export default class BoardPlayer {
   constructor(model, unlocks, reverse = false) {
     this.model = model;
@@ -8,6 +10,7 @@ export default class BoardPlayer {
     this.lastStartedVersion = -1;
     this.guessVersion = undefined;
     this.ticksUntilGuess = undefined;
+    this.guessLoc = undefined;
 
     const automationConfig = this.automationConfig;
     this.model.mulligans =
@@ -80,7 +83,10 @@ export default class BoardPlayer {
 
   handleInterval() {
     // Nothing to do if the board is finished.
-    if (this.model.isWon || this.model.isLost) return;
+    if (this.model.isWon || this.model.isLost) {
+      this.clearGuess();
+      return;
+    }
 
     // Nothing to do if we're reverse and reversed autoclicker isn't unlocked yet.
     if (this.automationReverse && !this.automationConfig.twoWorkers) {
@@ -99,6 +105,7 @@ export default class BoardPlayer {
       this.model.squareAt(this.automationLoc).automationFocusBlocked =
         undefined;
       this.lastStartedVersion = this.model.version;
+      this.clearGuess();
     }
 
     // Simulate a left and/or right click on the square at the next automation location.
@@ -115,28 +122,45 @@ export default class BoardPlayer {
     this.model.squareAt(this.automationLoc).automationFocus++;
   }
 
+  clearGuess() {
+    this.ticksUntilGuess = undefined;
+    if (this.guessLoc !== undefined) {
+      this.model.squareAt(this.guessLoc).ticksUntilGuess = undefined;
+    }
+    this.guessLoc = undefined;
+  }
+
   handleGuess() {
     if (this.automationReverse || !this.automationConfig.guessWhenStuck) return;
 
     // Start the guess timer if this is the first time we've been stuck on this version.
     if (this.model.version !== this.guessVersion) {
       this.guessVersion = this.model.version;
+      this.clearGuess();
       this.ticksUntilGuess = 4 * 300; // 5 minute delay at 1x speed. 18.75s at 16x speed.
     }
 
     this.ticksUntilGuess--;
+    if (this.guessLoc !== undefined) {
+      this.model.squareAt(this.guessLoc).ticksUntilGuess = this.ticksUntilGuess;
+    }
 
-    if (this.ticksUntilGuess === 0) {
-      // Time to guess.
+    if (this.ticksUntilGuess === GUESS_VIZ_DURATION) {
       const candidates = this.model
         .allSquares()
         .filter(({ square }) => !square.revealed && !square.flagged);
       if (candidates.length > 0) {
-        this.handleClick(
-          candidates[Math.floor(Math.random() * candidates.length)].loc,
-        );
+        this.guessLoc =
+          candidates[Math.floor(Math.random() * candidates.length)].loc;
+        this.model.squareAt(this.guessLoc).ticksUntilGuess =
+          this.ticksUntilGuess;
       }
-      this.ticksUntilGuess = undefined;
+    }
+
+    if (this.ticksUntilGuess === 0 && this.guessLoc !== undefined) {
+      // Time to guess.
+      this.handleClick(this.guessLoc);
+      this.clearGuess();
     }
   }
 }

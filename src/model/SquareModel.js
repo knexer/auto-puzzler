@@ -4,6 +4,7 @@ export default class SquareModel {
   #flagged = false;
   #revealed = false;
   automationFocus = false;
+  ticksUntilGuess = undefined;
 
   constructor(onChange) {
     this.onChange = onChange;

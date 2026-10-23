@@ -58,6 +58,5 @@ It took a lot of iteration to get to this point in using Valtio. It's a confusin
 
 - Add some ending that's more satisfying than just 'you bought all the upgrades, you win'. Thinking of a final challenge mega sized board, maybe something that reveals a message in the mine pattern, like 'GG' or a smileyface or something.
 - Add a confirmation to the Reset Save button
-- Show the auto-guess and auto-restart timers for each board
 - MAYBE add smarter automation rules, e.g. ones that consider pairs of nearby cells.
 - MAYBE Make forced guess boards a) less common or b) feel better or c) give players more mitigation options
